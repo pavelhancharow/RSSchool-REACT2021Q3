@@ -1,0 +1,19 @@
+{
+  "name": "react-components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pavelhancharow/RSSchool-REACT2021Q3.git"
+  },
+  "author": "Pavel Hancharou",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pavelhancharow/RSSchool-REACT2021Q3/issues"
+  },
+  "homepage": "https://github.com/pavelhancharow/RSSchool-REACT2021Q3#readme"
+}
