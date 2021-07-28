@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/pavelhancharow/RSSchool-REACT2021Q3/issues"
   },
-  "homepage": "https://github.com/pavelhancharow/RSSchool-REACT2021Q3#readme"
+  "homepage": "https://github.com/pavelhancharow/RSSchool-REACT2021Q3#readme",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
 }
