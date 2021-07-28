@@ -88,6 +88,7 @@ const webpackConfig = (env): Configuration => ({
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
+      favicon: './public/react.ico',
       filename: 'index.html'
     }),
     new webpack.DefinePlugin({
