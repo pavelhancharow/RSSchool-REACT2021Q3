@@ -7,8 +7,8 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 const webpackConfig = (env): Configuration => ({
-  mode: env.development ? 'development' : 'production',
-  ...(env.production || !env.development ? {} : {devtool: 'inline-source-map'}),
+  mode: env.development === 'development' ? 'development' : 'production',
+  ...(env.production || !env.development ? {} : {devtool: 'source-map'}),
   entry: './src/index.tsx',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -30,56 +30,24 @@ const webpackConfig = (env): Configuration => ({
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'assets/resource',
+        test: /\.s[ac]ss$/i,
         use: [
-          {
-            loader: 'file-loader',
-            options: {
-                outputPath: './assets/img',
-                name: '[name].[ext]'
-            },
-          },
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              bypassOnDebug: true,
-              mozjpeg: {
-                progressive: true,
-                quality: 75
-              },
-              optipng: {
-                enabled: false,
-              },
-              pngquant: {
-                quality: [0.65, 0.90],
-                speed: 4
-              },
-              gifsicle: {
-                interlaced: false,
-                optimizationLevel: 1
-              },
-              webp: {
-                quality: 75
-              }
-            }
-          },
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
         ],
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf)$/i,
-        type: 'assets/resource',
-        use: [{
-          loader: 'file-loader',
-          options: {
-            outputPath: './assets/fonts',
-            name: '[name].[ext]'
-          }
-        }]
-      },
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader'
+          },
+        ],
+      }
     ]
   },
   plugins: [
