@@ -1,39 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import CardType from 'src/model/CardType';
-import Checkbox from './Checkbox';
-import CountrySelect from './CountrySelect';
-import Date from './Date';
-import FirstName from './FirstName';
-import Gender from './Gender';
-import LastName from './LastName';
+import ErrorsType from 'src/model/ErrorsType';
+import Checkbox from './checkbox';
+import CountrySelect from './countrySelect';
+import Date from './date';
+import FirstName from './firstName';
+import Gender from './gender';
+import LastName from './lastName';
 
 interface ISetFormData {
   setFormData: (state: CardType[] | ((prevVar: CardType[]) => CardType[])) => void;
 }
 
-type ValidType = {
-  inputValidClass: string[];
-};
-
-const valid: ValidType = {
-  inputValidClass: ['is-valid', 'is-invalid']
-};
-
 const Form: React.FC<ISetFormData> = ({ setFormData }) => {
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [birthDate, setBirthDate] = useState<string>('');
-  const [country, setCountry] = useState<string>('Belarus');
+  const [country, setCountry] = useState<string>('');
   const [agree, setAgree] = useState<boolean>(false);
   const [sex, setSex] = useState<boolean>(false);
   const [gender, setGender] = useState<string>('male');
+  const [errors, setErrors] = useState<ErrorsType>({});
 
   useEffect(() => {
     setGender(sex ? 'female' : 'male');
   }, [sex]);
 
+  const validate = () => {
+    setErrors({});
+
+    if (!agree) setErrors((state) => ({ ...state, agree }));
+    if (!firstName) setErrors((state) => ({ ...state, firstName }));
+    if (!lastName) setErrors((state) => ({ ...state, lastName }));
+    if (!birthDate) setErrors((state) => ({ ...state, birthDate }));
+    if (!country) setErrors((state) => ({ ...state, country }));
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    validate();
+
+    if (!agree || !firstName || !lastName || !birthDate || !country) return;
+
     setFormData((state) => [...state, { firstName, lastName, birthDate, country, gender, agree }]);
   };
 
@@ -41,13 +49,13 @@ const Form: React.FC<ISetFormData> = ({ setFormData }) => {
     <form style={{ marginBottom: '30px' }} onSubmit={handleSubmit}>
       <fieldset>
         <legend>Data Form</legend>
-        <FirstName firstName={firstName} setFirstName={setFirstName} />
-        <LastName lastName={lastName} setLastName={setLastName} />
-        <CountrySelect country={country} setCountry={setCountry} />
+        <FirstName firstName={firstName} setFirstName={setFirstName} errors={errors} />
+        <LastName lastName={lastName} setLastName={setLastName} errors={errors} />
+        <CountrySelect country={country} setCountry={setCountry} errors={errors} />
         <Gender sex={sex} setSex={setSex} gender={gender} />
-        <Date birthDate={birthDate} setBirthDate={setBirthDate} />
-        <Checkbox agree={agree} setAgree={setAgree} />
-        <button type="submit" className="btn btn-primary">
+        <Date birthDate={birthDate} setBirthDate={setBirthDate} errors={errors} />
+        <Checkbox agree={agree} setAgree={setAgree} errors={errors} />
+        <button type="submit" className="btn btn-primary" style={{ marginTop: '20px' }}>
           Submit
         </button>
       </fieldset>

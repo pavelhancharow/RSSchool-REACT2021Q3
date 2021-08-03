@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ErrorsType from 'src/model/ErrorsType';
 
 interface IDate {
   agree: boolean;
   setAgree: (value: boolean | ((prevVar: boolean) => boolean)) => void;
+  errors: ErrorsType;
 }
 
-const Checkbox: React.FC<IDate> = ({ agree, setAgree }) => {
+const Checkbox: React.FC<IDate> = ({ agree, setAgree, errors }) => {
+  const [valid, setValid] = useState<string>('');
+
+  useEffect(() => {
+    setValid(!agree && errors.agree !== undefined ? 'is-invalid' : '');
+  }, [agree, errors]);
+
   return (
-    <fieldset className="form-group" style={{ padding: '20px 0' }}>
+    <fieldset className="form-group" style={{ marginTop: '20px' }}>
       <div className="form-check">
         <input
-          className="form-check-input"
+          className={`form-check-input ${valid}`}
           name="agree"
           type="checkbox"
           checked={agree}
