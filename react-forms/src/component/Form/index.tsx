@@ -21,10 +21,23 @@ const Form: React.FC<ISetFormData> = ({ setFormData }) => {
   const [sex, setSex] = useState<boolean>(false);
   const [gender, setGender] = useState<string>('male');
   const [errors, setErrors] = useState<ErrorsType>({});
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     setGender(sex ? 'female' : 'male');
   }, [sex]);
+
+  useEffect(() => {
+    if (reset) {
+      setFirstName('');
+      setLastName('');
+      setBirthDate('');
+      setCountry('');
+      setAgree(false);
+      setSex(false);
+      setReset(false);
+    }
+  }, [reset]);
 
   const validate = () => {
     setErrors({});
@@ -43,6 +56,7 @@ const Form: React.FC<ISetFormData> = ({ setFormData }) => {
     if (!agree || !firstName || !lastName || !birthDate || !country) return;
 
     setFormData((state) => [...state, { firstName, lastName, birthDate, country, gender, agree }]);
+    setReset(true);
   };
 
   return (
