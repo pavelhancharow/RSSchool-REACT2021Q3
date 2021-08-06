@@ -3,6 +3,7 @@ type ErrorsType = {
   birthDate?: string;
   country?: string;
   firstName?: string;
+  gender?: string;
   lastName?: string;
 };
 
