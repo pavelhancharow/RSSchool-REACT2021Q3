@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.tsx",
   "scripts": {
-    "start": "webpack-cli serve --mode=development --env development --open --hot",
+    "start": "webpack-cli serve --mode=development --env development --open --hot --history-api-fallback",
     "build": "webpack --mode=production --env production --progress",
     "lint": "eslint './src/**/*.{ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix"
@@ -17,6 +17,8 @@
     "@types/node": "^16.4.5",
     "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.1.8",
+    "@types/react-transition-group": "^4.4.2",
     "@types/webpack": "^5.28.0",
     "@types/webpack-dev-server": "^3.11.5",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
@@ -50,6 +52,7 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "react-transition-group": "^4.4.2"
   }
 }
