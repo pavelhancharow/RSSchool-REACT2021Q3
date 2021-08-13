@@ -1,4 +1,5 @@
 import CardJSON from 'src/model/cardJSON';
+import SearchParamType from 'src/model/searchParam';
 
 export const queryObject = {
   base: 'https://newsapi.org/v2/everything?',
@@ -18,7 +19,11 @@ function getQueryString() {
   return queryObject.base + curr.join('&');
 }
 
-async function fetchApi() {
+const getApiJSON = async ({ searchValue, sort, activePage }: SearchParamType): Promise<CardJSON> => {
+  queryObject.q = searchValue;
+  queryObject.sortBy = sort;
+  queryObject.page = activePage;
+
   try {
     const response = await fetch(getQueryString());
     const cardJSON = await response.json();
@@ -26,24 +31,18 @@ async function fetchApi() {
   } catch (error) {
     throw new Error(error);
   }
-}
-
-const getAPICards = async (value: string): Promise<CardJSON> => {
-  queryObject.q = value;
-
-  return fetchApi();
 };
 
-export const sortAPICards = async (value = 'relevancy'): Promise<CardJSON> => {
-  queryObject.sortBy = value;
-
-  return fetchApi();
+export const getDetailJSON = async (val: string): Promise<CardJSON> => {
+  try {
+    const response = await fetch(
+      `https://newsapi.org/v2/everything?qInTitle=${val}&language=en&apiKey=7b26deb79d1e4b0cbbf087f6fcdb8add`
+    );
+    const cardJSON = await response.json();
+    return cardJSON;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
-export const pageAPICards = async (value = '1'): Promise<CardJSON> => {
-  queryObject.page = +value;
-
-  return fetchApi();
-};
-
-export default getAPICards;
+export default getApiJSON;
