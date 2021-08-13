@@ -1,60 +1,59 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
-import { Article } from 'src/model/cardJSON';
-import { pageAPICards, queryObject } from 'src/service/api';
+import SearchParamType from 'src/model/searchParam';
+import { queryObject } from 'src/service/api';
 
 interface IPagination {
-  activePage: number;
-  setActivePage: (val: number | ((val: number) => number)) => void;
-  showPages: number;
-  setShowPages: (val: number | ((val: number) => number)) => void;
-  setIsLoading: (value: boolean) => void;
-  setArticles: (value: Article[]) => void;
-  totalResults: number;
+  getAPICards: () => void;
+  searchParam: SearchParamType;
+  setSearchParam: (param: SearchParamType | ((param: SearchParamType) => SearchParamType)) => void;
 }
 
-const current = 5;
-
-const Pagination: React.FC<IPagination> = ({
-  activePage,
-  setActivePage,
-  showPages,
-  setShowPages,
-  setIsLoading,
-  setArticles,
-  totalResults
-}) => {
+const Pagination: React.FC<IPagination> = ({ getAPICards, searchParam, setSearchParam }) => {
+  const { activePage, showPages, totalResults, countPaginationOnPage: current } = searchParam;
+  const { pageSize } = queryObject;
   const [result, setResult] = useState<JSX.Element[]>([]);
+  const [watcher, setWatcher] = useState<boolean>(false);
 
   const handlePage = (e: MouseEvent) => {
     e.preventDefault();
     const { page } = (e.target as HTMLElement).dataset;
-    setActivePage(page ? +page : 1);
+
+    setSearchParam((param) => ({ ...param, activePage: page ? +page : 1 }));
+    setWatcher(true);
+  };
+
+  const changeCurrPage = (operator: number) => {
+    setSearchParam((param) => {
+      const { activePage: active, showPages: count } = param;
+      const prevPage = active;
+      const prevShowPages = count;
+
+      return {
+        ...param,
+        activePage: prevPage + operator,
+        showPages: prevShowPages + operator
+      };
+    });
   };
 
   const nextPages = (e: MouseEvent) => {
     e.preventDefault();
-    setActivePage((val) => val + current);
-    setShowPages((val) => val + current);
+    changeCurrPage(current);
+    setWatcher(true);
   };
 
   const prevPages = (e: MouseEvent) => {
     e.preventDefault();
-    setActivePage((val) => val - current);
-    setShowPages((val) => val - current);
+    changeCurrPage(-current);
+    setWatcher(true);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-
-    const response = pageAPICards(activePage.toString());
-    response
-      .then((res) => setArticles(res.articles))
-      .catch((err) => new Error(err))
-      .finally(() => setIsLoading(false));
+    if (watcher) getAPICards();
 
     for (let i = showPages - (current - 1); i <= showPages; i += 1) {
       const item = (
-        <li className={`page-item ${+activePage === i ? 'active' : null}`} key={i}>
+        <li className={`page-item ${activePage === i ? 'active' : null}`} key={i}>
           <a className="page-link" href="/" data-page={i} onClick={handlePage}>
             {i}
           </a>
@@ -77,7 +76,7 @@ const Pagination: React.FC<IPagination> = ({
           </a>
         </li>
         {result}
-        <li className={`page-item ${showPages > Math.floor(totalResults / queryObject.pageSize) ? 'disabled' : null}`}>
+        <li className={`page-item ${showPages > Math.floor(totalResults / pageSize) ? 'disabled' : null}`}>
           <a className="page-link" href="/" onClick={nextPages}>
             &raquo;
           </a>
