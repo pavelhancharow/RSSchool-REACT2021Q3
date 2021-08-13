@@ -1,44 +1,49 @@
 import React, { useState } from 'react';
-import { Article } from 'src/model/cardJSON';
-import Cards from '../Card';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import SearchParamType from 'src/model/searchParam';
+import About from '../About';
+import ErrorPage from '../Error';
+import Home from '../Home';
+import Details from '../Details';
 import Navbar from '../Navbar';
-import Pagination from '../Pagination';
-import Spinner from '../Spinner';
 
 import './index.scss';
 
+const searchParamInit: SearchParamType = {
+  searchValue: '',
+  sort: 'relevancy',
+  activePage: 1,
+  showPages: 5,
+  totalResults: 0,
+  countPaginationOnPage: 5,
+  idDetails: 0,
+  qInTitle: ''
+};
+
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [totalResults, setTotalResults] = useState<number>(0);
-  const [activePage, setActivePage] = useState<number>(1);
-  const [showPages, setShowPages] = useState<number>(5);
+  const [searchParam, setSearchParam] = useState<SearchParamType>(searchParamInit);
+  const [watcher, setWatcher] = useState<boolean>(false);
 
   return (
-    <>
-      <Navbar
-        setIsLoading={setIsLoading}
-        articles={articles}
-        setArticles={setArticles}
-        setTotalResults={setTotalResults}
-        setActivePage={setActivePage}
-        setShowPages={setShowPages}
-      />
-      <div className="container" style={{ padding: '40px 0' }}>
-        {!isLoading ? <Cards articles={articles} /> : <Spinner />}
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Switch>
+          <Route exact path="/">
+            <Home watcher={watcher} setWatcher={setWatcher} searchParam={searchParam} setSearchParam={setSearchParam} />
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path={`/details/${searchParam.idDetails}`}>
+            <Details searchParam={searchParam} />
+          </Route>
+          <Route path="*" exact>
+            <ErrorPage />
+          </Route>
+        </Switch>
       </div>
-      {articles.length ? (
-        <Pagination
-          activePage={activePage}
-          setActivePage={setActivePage}
-          showPages={showPages}
-          setShowPages={setShowPages}
-          setIsLoading={setIsLoading}
-          setArticles={setArticles}
-          totalResults={totalResults}
-        />
-      ) : null}
-    </>
+    </Router>
   );
 };
 
