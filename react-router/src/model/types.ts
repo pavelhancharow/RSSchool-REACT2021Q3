@@ -4,7 +4,7 @@ type CardJSON = {
   articles: Article[];
 };
 
-export type Article = {
+type Article = {
   source: {
     id: string;
     name: string;
@@ -18,4 +18,4 @@ export type Article = {
   content: string;
 };
 
-export default CardJSON;
+export { CardJSON, Article };
