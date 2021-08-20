@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import './index.scss';
 
 const ErrorPage: React.FC = () => {
+  const history = useHistory();
+
   return (
-    <div className="container">
+    <>
       <div className="row">
         <div className="col-md-12 error">
           <div className="error-template">
@@ -13,14 +15,14 @@ const ErrorPage: React.FC = () => {
             <h2>404 Not Found</h2>
             <div className="error-details">Sorry, an error has occured, Requested page not found!</div>
             <div className="error-actions">
-              <Link to="/" className="btn btn-primary btn-lg">
+              <button type="button" className="btn btn-primary btn-lg" onClick={() => history.push('/')}>
                 Take Me Home
-              </Link>
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
