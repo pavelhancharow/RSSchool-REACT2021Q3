@@ -1,30 +1,17 @@
-import React, { MouseEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import Navigation from './navigation';
 
 const Navbar: React.FC = () => {
   const [showNavbar, setShowNavbar] = useState<boolean>(false);
-  const [activeLink, setActiveLink] = useState<string>(
-    `/${window.location.href.slice(window.location.href.lastIndexOf('/') + 1)}`
-  );
-
-  const handleLink = (e: MouseEvent) => {
-    const { pathname } = e.target as HTMLAnchorElement;
-
-    setActiveLink(pathname);
-  };
-
-  const handleShowNavbar = (e: MouseEvent) => {
-    e.preventDefault();
-    setShowNavbar((val) => !val);
-  };
+  const showNavbarHandler = () => setShowNavbar((val) => !val);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/" onClick={handleLink}>
+        <NavLink className="navbar-brand" exact to="/">
           Latest News App
-        </Link>
+        </NavLink>
         <button
           className="navbar-toggler collapsed"
           type="button"
@@ -33,12 +20,12 @@ const Navbar: React.FC = () => {
           aria-controls="navbarColor01"
           aria-expanded="false"
           aria-label="Toggle navigation"
-          onClick={handleShowNavbar}
+          onClick={showNavbarHandler}
         >
           <span className="navbar-toggler-icon" />
         </button>
         <div className={`navbar-collapse collapse ${showNavbar && 'show'}`} id="navbarColor01">
-          <Navigation activeLink={activeLink} handleLink={handleLink} />
+          <Navigation />
         </div>
       </div>
     </nav>

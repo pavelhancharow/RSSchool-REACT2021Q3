@@ -1,27 +1,25 @@
-import React, { MouseEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import routesData from 'src/data/routesData';
 
-interface INavigation {
-  activeLink: string;
-  handleLink: (e: MouseEvent) => void;
-}
+const Navigation: React.FC = () => {
+  return (
+    <ul className="navbar-nav me-auto">
+      {routesData
+        .filter((route) => route.name)
+        .map((route) => {
+          const { path, name } = route;
 
-const Navigation: React.FC<INavigation> = ({ activeLink, handleLink }) => {
-  const links = ['/', '/features', '/pricing', '/about'];
-
-  const Links = () => {
-    return links.map((link) => {
-      return (
-        <li className="nav-item" key={link}>
-          <Link className={`nav-link ${activeLink === link && 'active'}`} to={link} onClick={handleLink}>
-            {link === links[0] ? 'home' : link.slice(1)}
-          </Link>
-        </li>
-      );
-    });
-  };
-
-  return <ul className="navbar-nav me-auto">{Links()}</ul>;
+          return (
+            <li className="nav-item" key={path}>
+              <NavLink exact className="nav-link" activeClassName="active" to={path}>
+                {name}
+              </NavLink>
+            </li>
+          );
+        })}
+    </ul>
+  );
 };
 
 export default Navigation;
