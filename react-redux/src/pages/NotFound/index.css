@@ -1,0 +1,14 @@
+.error {
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.error-template {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-actions {
+  margin-top: 20px;
+}

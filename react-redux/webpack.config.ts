@@ -7,8 +7,8 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 const webpackConfig = (env): Configuration => ({
-  mode: env.development ? 'development' : 'production',
-  ...(env.production || !env.development ? {} : {devtool: 'source-map'}),
+  // mode: env.development ? 'development' : 'production',
+  ...(env.production || !env.development ? {} : { devtool: 'source-map' }),
   entry: './src/index.tsx',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
